@@ -58,21 +58,23 @@ namespace Logika
         {
             float nextX = kulka.XNext;
             float nextY = kulka.YNext;
-            float vectorX = kulka.XNext - kulka.X;
-            float vectorY = kulka.YNext - kulka.Y;
+            float vectorX = kulka.XNext - kulka.fX;
+            float vectorY = kulka.YNext - kulka.fY;
             float velocityX = vectorX / (100);
             float velocityY = vectorY / (100);
-            if (nextX == kulka.X && nextY == kulka.Y)
+            if (nextX - kulka.X < 10 && nextY - kulka.Y < 10)
             {
                 (nextX, nextY) = NextPosition();
                 kulka.XNext = nextX;
                 kulka.YNext = nextY;
+                kulka.fX = kulka.X;
+                kulka.fY = kulka.Y;
                 kulka.Speed = (float)(random.NextDouble() * (2.0f - 0.5f) + 0.5f);
 
                 vectorX = kulka.XNext - kulka.X;
                 vectorY = kulka.YNext - kulka.Y;
-                /*velocityX = vectorX / (100);
-                velocityY = vectorY / (100);*/
+                velocityX = vectorX / (100);
+                velocityY = vectorY / (100);
                 // Wywołaj zdarzenie, że kulka została przesunięta
                 /*KulkaMoved?.Invoke(this, new KulkaMovedEventArgs(kulka));*/
             }

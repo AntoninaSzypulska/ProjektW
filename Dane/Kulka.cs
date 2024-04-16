@@ -7,16 +7,21 @@ namespace Dane
 {
     public class Kulka : INotifyPropertyChanged
     {
+        private float firstX;
+        private float firstY;
         private float xK;
         private float yK;
         private float xNext;
         private float yNext;
         private float speed;
+        
         private Random random;
         private Plansza plansza;
 
         public Kulka(float x, float y, float nx, float xy)
         {
+            this.firstX = x;
+            this.firstY = y;
             this.xK = x;
             this.yK = y;
             this.xNext = x;
@@ -88,6 +93,31 @@ namespace Dane
             }
         }
 
+        public float fX
+        {
+            get { return firstX; }
+            set
+            {
+                if(firstX != value)
+                {
+                    firstX = value;
+                    OnPropertyChanged(nameof(fX));
+                }
+            }
+        }
+
+        public float fY
+        {
+            get { return firstY; }
+            set
+            {
+                if (firstY != value)
+                {
+                    firstY = value;
+                    OnPropertyChanged(nameof(fY));
+                }
+            }
+        }
 
         //co zrobiłem
         public void move(float newX, float newY)
