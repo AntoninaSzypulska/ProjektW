@@ -30,5 +30,24 @@ namespace LogikaTest
             Assert.IsTrue(kulka.X >= 0 && kulka.X < logika.plansza.GetWidth);
             Assert.IsTrue(kulka.Y >= 0 && kulka.Y < logika.plansza.GetHeight);
         }
+
+        [TestMethod]
+        public void TestMovekulka()
+        {
+
+            Logika.Logika logika = new Logika.Logika();
+
+            Kulka kulka = logika.createKulka();
+
+            Assert.IsNotNull(kulka);
+
+            float oldX = kulka.getX();
+            float oldY = kulka.getY();
+            logika.MoveToNextPosition(kulka);
+            float newX = kulka.getX();
+            float newY = kulka.getY();
+            Assert.AreNotEqual(oldX, newX);
+            Assert.AreNotEqual(oldY, newY);
+        }
     }
 }

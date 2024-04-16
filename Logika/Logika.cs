@@ -9,28 +9,28 @@ namespace Logika
     {
         public Plansza plansza;
         public KulkiRepository kulkiRepository;
-        private Ruch ruch; //emm
+        public Random random = new Random();
+        //private Ruch ruch; //emm
 
         public Logika()
         {
             this.plansza = new Plansza();
             kulkiRepository = new KulkiRepository();
-            this.ruch = new Ruch(plansza); //emm
+            //this.ruch = new Ruch(plansza); //emm
         }
 
         public Kulka createKulka()
         {
             int width = plansza.GetWidth;
             int height = plansza.GetHeight;
-            Random random = new Random();
+
 
             float randomX = (float)random.NextDouble() * width;
             float randomY = (float)random.NextDouble() * height;
+            //float randomXNew = (float)random.NextDouble() * width;
+            //float randomYNew = (float)random.NextDouble() * height;
 
-            float randomXNew = (float)random.NextDouble() * width;
-            float randomYNew = (float)random.NextDouble() * height;
-
-            return new Kulka(randomX, randomY, randomXNew, randomYNew);
+            return new Kulka(randomX, randomY);
         }
 
         public void create(int amount)
@@ -52,23 +52,41 @@ namespace Logika
 
         public void MoveToNextPosition(Kulka kulka) //gdzie ma być ruch zrobiony?
         {
-            (float newX, float newY) = ruch.NextPosition();
+            /*(float newX, float newY) = ruch.NextPosition();*/
+            float nextX = kulka.getXNext(), nextY = kulka.getYNext();
 
-            while (kulka.X != newX || kulka.Y != newY)
+            if (nextX == kulka.getX() && nextY == kulka.getY())
             {
-                //kierunek ruchu dla osi X
-                float dx = Math.Sign(newX - kulka.X) * 0.1f; 
+                (nextX, nextY) = NextPosition();
+                kulka.setXNext(nextX);
+                kulka.setYNext(nextY);
+                kulka.setSpeed((float)(random.NextDouble() * (2.0f - 0.5f) + 0.5f));
+            }
+            if (kulka.getX() != nextX || kulka.getY() != nextY)
+            {
+                float vektorX = kulka.getXNext() - kulka.getX();
+                float vectorY = kulka.getYNext() - kulka.getY();
+                float velocityX = vektorX / ((float) kulka.getSpeed() * 100);
+                float velocityY = vectorY / (kulka.getSpeed() * 100);
 
-                //kierunek ruchu dla osi Y
-                float dy = Math.Sign(newY - kulka.Y) * 0.1f; 
-
-                float updatedX = kulka.X + dx;
-                float updatedY = kulka.Y + dy;
+                float updatedX = kulka.getX() + velocityX;
+                float updatedY = kulka.getY() + velocityY;
 
                 kulka.move(updatedX, updatedY);
 
-                System.Threading.Thread.Sleep(50);
+                /*System.Threading.Thread.Sleep(50);*/
             }
+        }
+
+        public (float, float) NextPosition()
+        {
+            float width = plansza.GetWidth;
+            float height = plansza.GetHeight;
+
+            float xNext = (float)random.NextDouble() * width;
+            float yNext = (float)random.NextDouble() * height;
+
+            return (xNext, yNext);
         }
 
         public void remove()

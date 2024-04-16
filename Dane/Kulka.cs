@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Text;
 
 namespace Dane
 {
@@ -8,13 +10,14 @@ namespace Dane
         private float yK;
         private float xNext;
         private float yNext;
+        private float speed;
+        private Random random;
+        private Plansza plansza;
 
-        public Kulka(float x, float y, float x2, float y2)
+        public Kulka(float x, float y)
         {
             this.xK = x;
             this.yK = y;
-            this.xNext = x2;
-            this.yNext = y2;
         }
 
         public float X => xK;   //do odczytu
@@ -25,11 +28,25 @@ namespace Dane
 
         public float YNext => yNext;
 
+
+        //co zrobiłem
         public void move(float newX, float newY)
         {
-            this.xK = newX;
-            this.yK = newY;
+            xK = newX;
+            yK = newY;
         }
+
+        public float getX () { return xK;}
+        public float getY () { return yK;}
+        public void setX (float newK) {  xK = newK; }
+        public void setY (float newY) {  yK = newY; }
+        public float getXNext () { return xNext;}
+        public float getYNext () { return yNext;}
+        public void setXNext (float newXNext) {  xNext = newXNext; }
+        public void setYNext (float newYNext) {  yNext = newYNext; }
+        public float getSpeed () { return speed;}
+        public void setSpeed (float speed) {  this.speed = speed; }
+
     }
 
 
