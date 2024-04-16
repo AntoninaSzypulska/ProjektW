@@ -27,12 +27,14 @@ namespace ViewModel
         public ICommand ChoiceButton { get; set; }
         public ICommand DelateButton { get; set; }
 
+        public ICommand StartButton { get; set; }
+
         public ViewModel()
         {
             Logika.Logika logika = new Logika.Logika();
             ChoiceButton = new RelayCommand(CreateKulki);
             DelateButton = new RelayCommand(DelateKulki);
-
+            StartButton = new RelayCommand(StartKulki);
         }
 
         private void CreateKulki(object parameter)
@@ -56,6 +58,16 @@ namespace ViewModel
 
             Kulki.Clear();
 
+        }
+
+        private void StartKulki(object parameter)
+        {
+            Logika.Logika logika = new Logika.Logika();
+
+            foreach (var kulka in logika.kulkiRepository.GetKulki())
+            {
+                
+            }
         }
 
         private void OnPropertyChanged([CallerMemberName] string propertyName = null)
