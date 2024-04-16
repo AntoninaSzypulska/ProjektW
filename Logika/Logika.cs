@@ -31,10 +31,10 @@ namespace Logika
 
             float randomX = (float)random.NextDouble() * width;
             float randomY = (float)random.NextDouble() * height;
-            //float randomXNew = (float)random.NextDouble() * width;
-            //float randomYNew = (float)random.NextDouble() * height;
+            float randomXNext = (float)random.NextDouble() * width;
+            float randomYNext = (float)random.NextDouble() * height;
 
-            return new Kulka(randomX, randomY);
+            return new Kulka(randomX, randomY, randomXNext, randomYNext);
         }
 
         public void create(int amount)
@@ -58,7 +58,10 @@ namespace Logika
         {
             float nextX = kulka.XNext;
             float nextY = kulka.YNext;
-
+            float vectorX = kulka.XNext - kulka.X;
+            float vectorY = kulka.YNext - kulka.Y;
+            float velocityX = vectorX / (100);
+            float velocityY = vectorY / (100);
             if (nextX == kulka.X && nextY == kulka.Y)
             {
                 (nextX, nextY) = NextPosition();
@@ -66,19 +69,19 @@ namespace Logika
                 kulka.YNext = nextY;
                 kulka.Speed = (float)(random.NextDouble() * (2.0f - 0.5f) + 0.5f);
 
+                vectorX = kulka.XNext - kulka.X;
+                vectorY = kulka.YNext - kulka.Y;
+                /*velocityX = vectorX / (100);
+                velocityY = vectorY / (100);*/
                 // Wywołaj zdarzenie, że kulka została przesunięta
-                KulkaMoved?.Invoke(this, new KulkaMovedEventArgs(kulka));
+                /*KulkaMoved?.Invoke(this, new KulkaMovedEventArgs(kulka));*/
             }
 
             if (kulka.X != nextX || kulka.Y != nextY)
             {
-                float vectorX = kulka.XNext - kulka.X;
-                float vectorY = kulka.YNext - kulka.Y;
-                float velocityX = vectorX / (kulka.Speed * 100);
-                float velocityY = vectorY / (kulka.Speed * 100);
 
-                float updatedX = kulka.X + 2;
-                float updatedY = kulka.Y + 2;
+                float updatedX = kulka.X + velocityX;
+                float updatedY = kulka.Y + velocityY;
 
                 kulka.move(updatedX, updatedY);
 

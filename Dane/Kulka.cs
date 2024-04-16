@@ -15,10 +15,12 @@ namespace Dane
         private Random random;
         private Plansza plansza;
 
-        public Kulka(float x, float y)
+        public Kulka(float x, float y, float nx, float xy)
         {
             this.xK = x;
             this.yK = y;
+            this.xNext = x;
+            this.yNext = y;
         }
 
         public float X
