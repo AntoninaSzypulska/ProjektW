@@ -20,7 +20,6 @@ namespace Logika
             this.plansza = new Plansza();
             kulkiRepository = new KulkiRepository();
             MoveTimer = new Timer();
-
         }
 
         public Kulka createKulka()
@@ -54,7 +53,7 @@ namespace Logika
             }
         }
 
-        public void MoveToNextPosition(Kulka kulka) //gdzie ma być ruch zrobiony?
+        public void MoveToNextPosition(Kulka kulka) 
         {
             float nextX = kulka.XNext;
             float nextY = kulka.YNext;
@@ -75,8 +74,6 @@ namespace Logika
                 vectorY = kulka.YNext - kulka.Y;
                 velocityX = vectorX / (100);
                 velocityY = vectorY / (100);
-                // Wywołaj zdarzenie, że kulka została przesunięta
-                /*KulkaMoved?.Invoke(this, new KulkaMovedEventArgs(kulka));*/
             }
 
             if (kulka.X != nextX || kulka.Y != nextY)
@@ -87,7 +84,6 @@ namespace Logika
 
                 kulka.move(updatedX, updatedY);
 
-                // Wywołaj zdarzenie, że kulka została przesunięta
                 KulkaMoved?.Invoke(this, new KulkaMovedEventArgs(kulka));
             }
         }
@@ -115,16 +111,12 @@ namespace Logika
         {
             MoveTimer.Interval = 10;
 
-            // Dodanie obsługi zdarzenia Elapsed
             MoveTimer.Elapsed += MoveTimer_Elapsed;
-
-            // Uruchomienie timera
             MoveTimer.Start();
         }
 
         private void MoveTimer_Elapsed(object sender, ElapsedEventArgs e)
         {
-            // Wywołanie metody MoveKulki przy każdym cyklu timera
             MoveKulki();
         }
 

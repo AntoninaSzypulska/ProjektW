@@ -1,4 +1,5 @@
 using Dane;
+using Logika;
 
 namespace LogikaTest
 {
@@ -41,13 +42,27 @@ namespace LogikaTest
 
             Assert.IsNotNull(kulka);
 
-            float oldX = kulka.getX();
-            float oldY = kulka.getY();
+            float oldX = kulka.X;
+            float oldY = kulka.Y;
             logika.MoveToNextPosition(kulka);
-            float newX = kulka.getX();
-            float newY = kulka.getY();
+            float newX = kulka.X;
+            float newY = kulka.Y;
             Assert.AreNotEqual(oldX, newX);
             Assert.AreNotEqual(oldY, newY);
+        }
+
+
+        [TestMethod]
+        public void TestNextPosition()
+        {
+
+            Logika.Logika logika = new Logika.Logika();
+
+            (float xNext, float yNext) = logika.NextPosition();
+
+            Assert.IsNotNull(xNext);
+            Assert.IsNotNull(yNext);
+
         }
     }
 }

@@ -8,8 +8,9 @@ namespace Logika
     {
         void create(int amount);
         void start();
-
         void remove();
+
+        void MoveKulki();
 
     }
 }

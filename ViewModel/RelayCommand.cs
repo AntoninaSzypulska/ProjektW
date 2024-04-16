@@ -7,7 +7,6 @@ namespace ViewModel
     {
         private Action<object> execute;
         private Func<object, bool> canExecute;
-        private Action choiceButtonExecute;
 
         public event EventHandler CanExecuteChanged;
 

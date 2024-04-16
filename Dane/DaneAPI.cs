@@ -8,5 +8,7 @@ namespace Dane
     {
         void add(Kulka kulka);
 
+        void Clear();
+
     }
 }

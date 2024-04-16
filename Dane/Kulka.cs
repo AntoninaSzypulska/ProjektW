@@ -119,7 +119,6 @@ namespace Dane
             }
         }
 
-        //co zrobiłem
         public void move(float newX, float newY)
         {
             X = newX;

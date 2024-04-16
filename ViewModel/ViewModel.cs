@@ -3,7 +3,6 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
-using static System.Net.Mime.MediaTypeNames;
 
 
 namespace ViewModel

@@ -8,7 +8,7 @@ namespace DaneTest
         [TestMethod]
         public void TestAddMethod()
         {
-            Kulka kulka = new Kulka(10, 20);
+            Kulka kulka = new Kulka(10, 20,10, 20);
 
             KulkiRepository repository = new KulkiRepository();
 
