@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Text;
 
 namespace Dane
 {
-    public class Kulka
+    public class Kulka : INotifyPropertyChanged
     {
         private float xK;
         private float yK;
@@ -20,35 +21,84 @@ namespace Dane
             this.yK = y;
         }
 
-        public float X => xK;   //do odczytu
+        public float X
+        {
+            get { return xK; }
+            set
+            {
+                if (xK != value)
+                {
+                    xK = value;
+                    OnPropertyChanged(nameof(X));
+                }
+            }
+        }
 
-        public float Y => yK;
+        public float Y
+        {
+            get { return yK; }
+            set
+            {
+                if (yK != value)
+                {
+                    yK = value;
+                    OnPropertyChanged(nameof(Y));
+                }
+            }
+        }
 
-        public float XNext => xNext;
+        public float XNext
+        {
+            get { return xNext; }
+            set
+            {
+                if (xNext != value)
+                {
+                    xNext = value;
+                    OnPropertyChanged(nameof(XNext));
+                }
+            }
+        }
 
-        public float YNext => yNext;
+        public float YNext
+        {
+            get { return yNext; }
+            set
+            {
+                if (yNext != value)
+                {
+                    yNext = value;
+                    OnPropertyChanged(nameof(YNext));
+                }
+            }
+        }
+
+        public float Speed
+        {
+            get { return speed; }
+            set
+            {
+                if (speed != value)
+                {
+                    speed = value;
+                    OnPropertyChanged(nameof(Speed));
+                }
+            }
+        }
 
 
         //co zrobiłem
         public void move(float newX, float newY)
         {
-            xK = newX;
-            yK = newY;
+            X = newX;
+            Y = newY;
         }
 
-        public float getX () { return xK;}
-        public float getY () { return yK;}
-        public void setX (float newK) {  xK = newK; }
-        public void setY (float newY) {  yK = newY; }
-        public float getXNext () { return xNext;}
-        public float getYNext () { return yNext;}
-        public void setXNext (float newXNext) {  xNext = newXNext; }
-        public void setYNext (float newYNext) {  yNext = newYNext; }
-        public float getSpeed () { return speed;}
-        public void setSpeed (float speed) {  this.speed = speed; }
+        public event PropertyChangedEventHandler PropertyChanged;
 
+        protected virtual void OnPropertyChanged(string propertyName)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
     }
-
-
-
 }

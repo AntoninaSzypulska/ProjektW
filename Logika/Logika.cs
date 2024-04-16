@@ -2,21 +2,25 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Timers;
 
 namespace Logika
 {
     public class Logika : LogikaAPI
     {
+        public event EventHandler<KulkaMovedEventArgs> KulkaMoved;
+
         public Plansza plansza;
         public KulkiRepository kulkiRepository;
         public Random random = new Random();
-        //private Ruch ruch; //emm
+        private readonly Timer MoveTimer;
 
         public Logika()
         {
             this.plansza = new Plansza();
             kulkiRepository = new KulkiRepository();
-            //this.ruch = new Ruch(plansza); //emm
+            MoveTimer = new Timer();
+
         }
 
         public Kulka createKulka()
@@ -52,29 +56,34 @@ namespace Logika
 
         public void MoveToNextPosition(Kulka kulka) //gdzie ma być ruch zrobiony?
         {
-            /*(float newX, float newY) = ruch.NextPosition();*/
-            float nextX = kulka.getXNext(), nextY = kulka.getYNext();
+            float nextX = kulka.XNext;
+            float nextY = kulka.YNext;
 
-            if (nextX == kulka.getX() && nextY == kulka.getY())
+            if (nextX == kulka.X && nextY == kulka.Y)
             {
                 (nextX, nextY) = NextPosition();
-                kulka.setXNext(nextX);
-                kulka.setYNext(nextY);
-                kulka.setSpeed((float)(random.NextDouble() * (2.0f - 0.5f) + 0.5f));
-            }
-            if (kulka.getX() != nextX || kulka.getY() != nextY)
-            {
-                float vektorX = kulka.getXNext() - kulka.getX();
-                float vectorY = kulka.getYNext() - kulka.getY();
-                float velocityX = vektorX / ((float) kulka.getSpeed() * 100);
-                float velocityY = vectorY / (kulka.getSpeed() * 100);
+                kulka.XNext = nextX;
+                kulka.YNext = nextY;
+                kulka.Speed = (float)(random.NextDouble() * (2.0f - 0.5f) + 0.5f);
 
-                float updatedX = kulka.getX() + velocityX;
-                float updatedY = kulka.getY() + velocityY;
+                // Wywołaj zdarzenie, że kulka została przesunięta
+                KulkaMoved?.Invoke(this, new KulkaMovedEventArgs(kulka));
+            }
+
+            if (kulka.X != nextX || kulka.Y != nextY)
+            {
+                float vectorX = kulka.XNext - kulka.X;
+                float vectorY = kulka.YNext - kulka.Y;
+                float velocityX = vectorX / (kulka.Speed * 100);
+                float velocityY = vectorY / (kulka.Speed * 100);
+
+                float updatedX = kulka.X + 2;
+                float updatedY = kulka.Y + 2;
 
                 kulka.move(updatedX, updatedY);
 
-                /*System.Threading.Thread.Sleep(50);*/
+                // Wywołaj zdarzenie, że kulka została przesunięta
+                KulkaMoved?.Invoke(this, new KulkaMovedEventArgs(kulka));
             }
         }
 
@@ -99,7 +108,29 @@ namespace Logika
 
         public void start()
         {
+            MoveTimer.Interval = 10;
 
+            // Dodanie obsługi zdarzenia Elapsed
+            MoveTimer.Elapsed += MoveTimer_Elapsed;
+
+            // Uruchomienie timera
+            MoveTimer.Start();
+        }
+
+        private void MoveTimer_Elapsed(object sender, ElapsedEventArgs e)
+        {
+            // Wywołanie metody MoveKulki przy każdym cyklu timera
+            MoveKulki();
+        }
+
+        public class KulkaMovedEventArgs : EventArgs
+        {
+            public Kulka MovedKulka { get; }
+
+            public KulkaMovedEventArgs(Kulka kulka)
+            {
+                MovedKulka = kulka;
+            }
         }
     }
 }

@@ -3,11 +3,15 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
+using static System.Net.Mime.MediaTypeNames;
+
 
 namespace ViewModel
 {
     public class ViewModel : INotifyPropertyChanged
     {
+        private Logika.Logika logika;
+
         public event PropertyChangedEventHandler PropertyChanged;
 
         private ObservableCollection<Kulka> kulki = new ObservableCollection<Kulka>();
@@ -31,7 +35,8 @@ namespace ViewModel
 
         public ViewModel()
         {
-            Logika.Logika logika = new Logika.Logika();
+            logika = new Logika.Logika();
+
             ChoiceButton = new RelayCommand(CreateKulki);
             DelateButton = new RelayCommand(DelateKulki);
             StartButton = new RelayCommand(StartKulki);
@@ -41,7 +46,6 @@ namespace ViewModel
         {
             if (AmountChoice > 0)
             {
-                Logika.Logika logika = new Logika.Logika();
                 logika.create(AmountChoice);
 
                 foreach (var kulka in logika.kulkiRepository.GetKulki())
@@ -53,7 +57,6 @@ namespace ViewModel
 
         private void DelateKulki(object parameter)
         {
-            Logika.Logika logika = new Logika.Logika();
             logika.remove();
 
             Kulki.Clear();
@@ -62,12 +65,8 @@ namespace ViewModel
 
         private void StartKulki(object parameter)
         {
-            Logika.Logika logika = new Logika.Logika();
 
-            foreach (var kulka in logika.kulkiRepository.GetKulki())
-            {
-                
-            }
+            logika.start();
         }
 
         private void OnPropertyChanged([CallerMemberName] string propertyName = null)
