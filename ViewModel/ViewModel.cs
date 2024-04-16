@@ -1,8 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Dane;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
-using System.Text;
 using System.Windows.Input;
 
 namespace ViewModel
@@ -11,42 +10,54 @@ namespace ViewModel
     {
         public event PropertyChangedEventHandler PropertyChanged;
 
-        private Model.Model model;
-        public ICommand ChoiceButton { get; set; }
+        private ObservableCollection<Kulka> kulki = new ObservableCollection<Kulka>();
+        public ObservableCollection<Kulka> Kulki
+        {
+            get { return kulki; }
+            set { kulki = value; OnPropertyChanged(); }
+        }
 
+        private int amountChoice;
         public int AmountChoice
         {
-            get
-            {
-                return model.GetAmount();
-            }
-            set
-            {
-                model.SetAmount(value);
-                onPropertyChanged();
-            }
+            get { return amountChoice; }
+            set { amountChoice = value; OnPropertyChanged(); }
         }
+
+        public ICommand ChoiceButton { get; set; }
+        public ICommand DelateButton { get; set; }
 
         public ViewModel()
         {
-            model = new Model.Model();
-            ChoiceButton = new RelayCommand(choiceButtonExecute);
+            Logika.Logika logika = new Logika.Logika();
+            ChoiceButton = new RelayCommand(CreateKulki);
+            DelateButton = new RelayCommand(DelateKulki);
         }
 
-        public void onPropertyChanged([CallerMemberName] string propertyName = null)
+        private void CreateKulki(object parameter)
         {
-            if (PropertyChanged != null)
+            if (AmountChoice > 0)
             {
-                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+                Logika.Logika logika = new Logika.Logika();
+                logika.create(AmountChoice);
+
+                foreach (var kulka in logika.kulkiRepository.GetKulki())
+                {
+                    Kulki.Add(kulka);
+                }
             }
         }
 
-        private void choiceButtonExecute(object o)
+        private void DelateKulki(object parameter)
         {
-            model.SetAmount(AmountChoice);
+            Logika.Logika logika = new Logika.Logika();
+            logika.remove();
+
+            Kulki.Clear();
+
         }
 
-        public void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        private void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
