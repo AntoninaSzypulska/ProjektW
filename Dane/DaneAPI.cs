@@ -7,5 +7,6 @@ namespace Dane
     public interface DaneAPI
     {
         void add(Kulka kulka);
+
     }
 }

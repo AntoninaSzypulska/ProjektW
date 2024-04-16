@@ -32,6 +32,7 @@ namespace ViewModel
             Logika.Logika logika = new Logika.Logika();
             ChoiceButton = new RelayCommand(CreateKulki);
             DelateButton = new RelayCommand(DelateKulki);
+
         }
 
         private void CreateKulki(object parameter)
