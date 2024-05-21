@@ -5,13 +5,16 @@ using System.Collections.Specialized;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
+using System.Threading.Tasks;
 using System.Timers;
 using static System.Net.Mime.MediaTypeNames;
+
 
 namespace Logika
 {
     public class Logika : LogikaAPI
     {
+
         public event EventHandler<KulkaMovedEventArgs> KulkaMoved;
 
         public Plansza plansza;
@@ -93,8 +96,9 @@ namespace Logika
             }
         }
 
-        public void MoveToNextPosition(Kulka kulka)
+        public async Task MoveToNextPosition(Kulka kulka)
         {
+
             float width = plansza.GetWidth;
             float height = plansza.GetHeight;
             float topLeftX = plansza.GettopLeftX;
