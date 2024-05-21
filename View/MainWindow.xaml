@@ -14,7 +14,7 @@
     </Window.DataContext>
     
     <Grid>
-        <Rectangle Width="740" Height="360" Fill="#E4F6A8" Stroke="DarkGray" StrokeThickness="1" />
+        <Rectangle Width="740" Height="340" Fill="#E4F6A8" Stroke="DarkGray" StrokeThickness="1" />
         
         <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
             <TextBlock Text="Wybierz ilość kulek" Panel.ZIndex="1"/>

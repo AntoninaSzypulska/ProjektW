@@ -30,11 +30,6 @@ namespace Logika
             int width = plansza.GetWidth;
             int height = plansza.GetHeight;
 
-
-            float randomX = (float)random.NextDouble() * width;
-            float randomY = (float)random.NextDouble() * height;
-            float randomXNext = (float)random.NextDouble() * width;
-            float randomYNext = (float)random.NextDouble() * height;
             int minWaga = 50;
             int maxWaga = 160;
             int minSrednica = 25;
@@ -43,6 +38,12 @@ namespace Logika
             int waga = (int)(minWaga + (random.NextDouble() * (maxWaga - minWaga)));
             int srednica = (int)(minSrednica + (random.NextDouble() * (maxSrednica - minSrednica)));
 
+            float marginX = width * 0.1f;
+            float marginY = height * 0.1f;
+            float randomX = marginX + (float)random.NextDouble() * (width - 2 * marginX);
+            float randomY = marginY + (float)random.NextDouble() * (height - 2 * marginY);
+            float randomXNext = marginX + (float)random.NextDouble() * (width - 2 * marginX);
+            float randomYNext = marginY + (float)random.NextDouble() * (height - 2 * marginY);
 
             return new Kulka(randomX, randomY, randomXNext, randomYNext, waga, srednica);
         }
@@ -73,30 +74,41 @@ namespace Logika
 
             float vectorX = kulka.XNext - kulka.fX;
             float vectorY = kulka.YNext - kulka.fY;
-            float velocityX = vectorX / 100; 
-            float velocityY = vectorY / 100; 
-            float srednica = kulka.Srednica;
+            float velocityX = vectorX / 100;
+            float velocityY = vectorY / 100;
+            float promien = kulka.Srednica / 2;
 
             float updatedX = kulka.X + velocityX;
             float updatedY = kulka.Y + velocityY;
 
-            if (kulka.X <= topLeftX + srednica || kulka.X >= topLeftX + width - srednica)
+            bool bounced = false;
+
+            if (updatedX - promien < topLeftX || updatedX + promien > topLeftX + width)
             {
-  
                 velocityX = -velocityX;
                 updatedX = kulka.X + velocityX;
-                kulka.XNext = updatedX;
+                kulka.XNext = kulka.fX - vectorX;
+                bounced = true;
             }
-            if (kulka.Y <= topLeftY + srednica || kulka.Y >= topLeftY + height - srednica)
+
+            if (updatedY - promien < topLeftY || updatedY + promien > topLeftY + height)
             {
                 velocityY = -velocityY;
                 updatedY = kulka.Y + velocityY;
-                kulka.YNext = updatedY;
+                kulka.YNext = kulka.fY - vectorY;
+                bounced = true;
+            }
+
+            if (bounced)
+            {
+                vectorX = kulka.XNext - kulka.fX;
+                vectorY = kulka.YNext - kulka.fY;
+                velocityX = vectorX / 100;
+                velocityY = vectorY / 100;
             }
 
             if (kulka.X != kulka.XNext || kulka.Y != kulka.YNext)
             {
-
                 updatedX = kulka.X + velocityX;
                 updatedY = kulka.Y + velocityY;
 
