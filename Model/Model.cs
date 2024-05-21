@@ -1,23 +1,52 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
 using System.Text;
+using Dane;
+using Logika;
 
 namespace Model
 {
-    public class Model
+    public class Model : INotifyPropertyChanged
     {
-        private int amountC;
+        private Logika.Logika logika;
 
-        public void SetAmount(int amount)
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        private ObservableCollection<Kulka> kulki = new ObservableCollection<Kulka>();
+        public ObservableCollection<Kulka> Kulki
         {
-            amountC = amount;
+            get { return kulki; }
+            set { kulki = value; OnPropertyChanged(); }
         }
 
-        public int GetAmount()
+        private int amountChoice;
+        public int AmountChoice
         {
-            return amountC;
+            get { return amountChoice; }
+            set { amountChoice = value; OnPropertyChanged(); }
+        }
+
+        public Model(Logika.Logika logika)
+        {
+            this.logika = logika;
+        }
+
+        public int GetBoardWidth()
+        {
+            return logika.plansza.GetWidth;
+        }
+
+        public int GetBoardHeight()
+        {
+            return logika.plansza.GetHeight;
+        }
+
+        private void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
-
-
 }

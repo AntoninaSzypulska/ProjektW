@@ -19,9 +19,6 @@ namespace Dane
         private float velocityX;
         private float velocityY;
 
-        private Random random;
-        private Plansza plansza;
-
         public Kulka(float x, float y, float nx, float xy, int waga, int srednica)
         {
             this.firstX = x;

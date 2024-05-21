@@ -38,7 +38,7 @@ namespace Logika
             int minSrednica = 25;
             int maxSrednica = 70;
 
-            int waga = (int)((minWaga + (random.NextDouble() * (maxWaga - minWaga))) / 2);
+            int waga = (int)((minWaga + (random.NextDouble() * (maxWaga - minWaga))));
             int srednica = (int)(minSrednica + (random.NextDouble() * (maxSrednica - minSrednica)));
 
             float marginX = width * 0.1f;
@@ -54,13 +54,13 @@ namespace Logika
                 randomYNext = marginY + (float)random.NextDouble() * (height - 2 * marginY);
 
                 Kulka newKulka = new Kulka(randomX, randomY, randomXNext, randomYNext, waga, srednica);
-                collision = IsCollidingWithExistingKulkas(newKulka);
+                collision = IsColliding(newKulka);
             } while (collision);
 
             return new Kulka(randomX, randomY, randomXNext, randomYNext, waga, srednica);
         }
 
-        private bool IsCollidingWithExistingKulkas(Kulka newKulka)
+        public bool IsColliding(Kulka newKulka)
         {
             foreach (var existingKulka in kulkiRepository.GetKulki())
             {

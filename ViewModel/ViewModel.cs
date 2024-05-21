@@ -3,6 +3,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
+using Model;
 
 
 namespace ViewModel
@@ -10,6 +11,7 @@ namespace ViewModel
     public class ViewModel : INotifyPropertyChanged
     {
         private Logika.Logika logika;
+        private Model.Model model;
 
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -29,8 +31,17 @@ namespace ViewModel
 
         public ICommand ChoiceButton { get; set; }
         public ICommand DelateButton { get; set; }
-
         public ICommand StartButton { get; set; }
+
+        public int BoardWidth
+        {
+            get { return model.GetBoardWidth(); }
+        }
+
+        public int BoardHeight
+        {
+            get { return model.GetBoardHeight(); }
+        }
 
         public ViewModel()
         {

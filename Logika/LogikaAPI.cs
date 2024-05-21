@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Dane;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -11,6 +12,8 @@ namespace Logika
         void remove();
 
         void MoveKulki();
+
+        (float, float) NextPosition();
 
     }
 }

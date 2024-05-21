@@ -32,5 +32,10 @@ namespace Dane
         {
             kulkiL.Clear();
         }
+
+        public int Size()
+        {
+            return kulkiL.Count;
+        }
     }
 }

@@ -10,5 +10,7 @@ namespace Dane
 
         void Clear();
 
+        int Size();
+
     }
 }
