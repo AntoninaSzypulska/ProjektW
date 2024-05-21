@@ -14,19 +14,21 @@
     </Window.DataContext>
     
     <Grid>
+        <Rectangle Width="740" Height="360" Fill="#E4F6A8" Stroke="DarkGray" StrokeThickness="1" />
+        
         <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
-            <TextBlock Text="Wybierz ilość kulek"/>
-            <TextBox Text="{Binding AmountChoice, Mode=TwoWay}" FontWeight="Bold" Margin="0 10" TextAlignment="Center"/>
-            <Button Content="Wybierz" Width="100" RenderTransformOrigin="0.5,0.5" Command="{Binding ChoiceButton}" Background="#FFACEAF5"/>
-            <Button Content="Skasuj" Width="100" RenderTransformOrigin="0.5,0.5" Command="{Binding DelateButton}" Background="#FFACEAF5"/>
-            <Button Content="Start" Width="100" RenderTransformOrigin="0.5,0.5" Command="{Binding StartButton}" Background="#FFACEAF5"/>
+            <TextBlock Text="Wybierz ilość kulek" Panel.ZIndex="1"/>
+            <TextBox Text="{Binding AmountChoice, Mode=TwoWay}" FontWeight="Bold" Margin="0 10" TextAlignment="Center" Panel.ZIndex="1"/>
+            <Button Content="Wybierz" Width="100" RenderTransformOrigin="0.5,0.5" Command="{Binding ChoiceButton}" Background="#FFACEAF5" Panel.ZIndex="1"/>
+            <Button Content="Skasuj" Width="100" RenderTransformOrigin="0.5,0.5" Command="{Binding DelateButton}" Background="#FFACEAF5" Panel.ZIndex="1"/>
+            <Button Content="Start" Width="100" RenderTransformOrigin="0.5,0.5" Command="{Binding StartButton}" Background="#FFACEAF5" Panel.ZIndex="1"/>
 
             <ItemsControl ItemsSource="{Binding Kulki}">
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
                         <Canvas>
                             <Canvas.RenderTransform>
-                                <TranslateTransform X="-340" Y="-240"/>
+                                <TranslateTransform X="-340" Y="-250" />
                             </Canvas.RenderTransform>
                         </Canvas>
                     </ItemsPanelTemplate>
@@ -42,7 +44,10 @@
                 <ItemsControl.ItemTemplate>
                     
                     <DataTemplate>
-                        <Ellipse Width="40" Height="40" Fill="#CD96EF" Stroke="#B74ECE" StrokeThickness="1"/>
+                        <Grid>
+                            <Ellipse Width="{Binding Srednica}" Height="{Binding Srednica}" Fill="#CD96EF" Stroke="#B74ECE" StrokeThickness="1"/>
+                            <TextBlock Text="{Binding Waga}" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="Black"/>
+                        </Grid>
                     </DataTemplate>
                     
                 </ItemsControl.ItemTemplate>

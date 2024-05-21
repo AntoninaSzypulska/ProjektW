@@ -1,8 +1,11 @@
 ﻿using Dane;
 using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Timers;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace Logika
 {
@@ -32,8 +35,16 @@ namespace Logika
             float randomY = (float)random.NextDouble() * height;
             float randomXNext = (float)random.NextDouble() * width;
             float randomYNext = (float)random.NextDouble() * height;
+            int minWaga = 50;
+            int maxWaga = 160;
+            int minSrednica = 25;
+            int maxSrednica = 70;
 
-            return new Kulka(randomX, randomY, randomXNext, randomYNext);
+            int waga = (int)(minWaga + (random.NextDouble() * (maxWaga - minWaga)));
+            int srednica = (int)(minSrednica + (random.NextDouble() * (maxSrednica - minSrednica)));
+
+
+            return new Kulka(randomX, randomY, randomXNext, randomYNext, waga, srednica);
         }
 
         public void create(int amount)
@@ -53,39 +64,47 @@ namespace Logika
             }
         }
 
-        public void MoveToNextPosition(Kulka kulka) 
+        public void MoveToNextPosition(Kulka kulka)
         {
-            float nextX = kulka.XNext;
-            float nextY = kulka.YNext;
+            float width = plansza.GetWidth;
+            float height = plansza.GetHeight;
+            float topLeftX = plansza.GettopLeftX;
+            float topLeftY = plansza.GettopLeftY;
+
             float vectorX = kulka.XNext - kulka.fX;
             float vectorY = kulka.YNext - kulka.fY;
-            float velocityX = vectorX / (100);
-            float velocityY = vectorY / (100);
-            if (nextX - kulka.X < 10 && nextY - kulka.Y < 10)
-            {
-                (nextX, nextY) = NextPosition();
-                kulka.XNext = nextX;
-                kulka.YNext = nextY;
-                kulka.fX = kulka.X;
-                kulka.fY = kulka.Y;
-                kulka.Speed = (float)(random.NextDouble() * (2.0f - 0.5f) + 0.5f);
+            float velocityX = vectorX / 100; 
+            float velocityY = vectorY / 100; 
+            float srednica = kulka.Srednica;
 
-                vectorX = kulka.XNext - kulka.X;
-                vectorY = kulka.YNext - kulka.Y;
-                velocityX = vectorX / (100);
-                velocityY = vectorY / (100);
+            float updatedX = kulka.X + velocityX;
+            float updatedY = kulka.Y + velocityY;
+
+            if (kulka.X <= topLeftX + srednica || kulka.X >= topLeftX + width - srednica)
+            {
+  
+                velocityX = -velocityX;
+                updatedX = kulka.X + velocityX;
+                kulka.XNext = updatedX;
+            }
+            if (kulka.Y <= topLeftY + srednica || kulka.Y >= topLeftY + height - srednica)
+            {
+                velocityY = -velocityY;
+                updatedY = kulka.Y + velocityY;
+                kulka.YNext = updatedY;
             }
 
-            if (kulka.X != nextX || kulka.Y != nextY)
+            if (kulka.X != kulka.XNext || kulka.Y != kulka.YNext)
             {
 
-                float updatedX = kulka.X + velocityX;
-                float updatedY = kulka.Y + velocityY;
+                updatedX = kulka.X + velocityX;
+                updatedY = kulka.Y + velocityY;
 
                 kulka.move(updatedX, updatedY);
 
                 KulkaMoved?.Invoke(this, new KulkaMovedEventArgs(kulka));
             }
+
         }
 
         public (float, float) NextPosition()

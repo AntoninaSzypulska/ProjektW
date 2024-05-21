@@ -14,19 +14,26 @@ namespace Dane
         private float xNext;
         private float yNext;
         private float speed;
-        
+        private int waga;
+        private int srednica;
+
         private Random random;
         private Plansza plansza;
 
-        public Kulka(float x, float y, float nx, float xy)
+        public Kulka(float x, float y, float nx, float xy, int waga, int srednica)
         {
             this.firstX = x;
             this.firstY = y;
             this.xK = x;
             this.yK = y;
-            this.xNext = x;
-            this.yNext = y;
+            this.xNext = nx;
+            this.yNext = xy;
+            this.waga = waga;
+            this.srednica = srednica;
         }
+
+        public float Waga => waga;
+        public float Srednica => srednica;
 
         public float X
         {
