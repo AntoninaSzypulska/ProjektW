@@ -47,6 +47,7 @@ namespace LogikaTest
             logika.MoveToNextPosition(kulka);
             float newX = kulka.X;
             float newY = kulka.Y;
+
             Assert.AreNotEqual(oldX, newX);
             Assert.AreNotEqual(oldY, newY);
         }
@@ -94,6 +95,40 @@ namespace LogikaTest
 
             bool collision3 = logika.IsColliding(kulka3);
             Assert.IsTrue(collision3);
+        }
+
+        [TestMethod]
+        public void TestMoveToNextPosition()
+        {
+
+            Logika.Logika logika = new Logika.Logika();
+            Kulka kulka1 = new Kulka(60, 60, 0, 60, 50, 20);
+            Kulka kulka2 = new Kulka(100, 100, 0, 0, 50, 20);
+            logika.kulkiRepository.add(kulka1);
+            logika.kulkiRepository.add(kulka2);
+
+            logika.MoveToNextPosition(kulka1);
+            logika.MoveToNextPosition(kulka2);
+
+            Assert.IsTrue(kulka1.X != 0 || kulka1.Y != 60);
+            Assert.IsTrue(kulka2.X != 100 || kulka2.Y != 100);
+        }
+
+        [TestMethod]
+        public void TestOdbicie()
+        {
+            Logika.Logika logika = new Logika.Logika();
+            Kulka kulka1 = new Kulka(0, 0, 0, 0, 50, 20);
+            Kulka kulka2 = new Kulka(100, 0, 0, 0, 50, 20);
+            kulka1.VelocityX = 1;
+            kulka2.VelocityX = -1;
+            float oldVelocityX1 = kulka1.VelocityX;
+            float oldVelocityX2 = kulka2.VelocityX;
+
+            logika.odbicie(kulka1, kulka2);
+
+            Assert.AreEqual(oldVelocityX1 * -1, kulka1.VelocityX);
+            Assert.AreEqual(oldVelocityX2 * -1, kulka2.VelocityX);
         }
     }
 }
