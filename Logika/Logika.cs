@@ -100,32 +100,28 @@ namespace Logika
             float topLeftX = plansza.GettopLeftX;
             float topLeftY = plansza.GettopLeftY;
 
-            float vectorX = kulka.XNext - kulka.fX;
+            /*float vectorX = kulka.XNext - kulka.fX;
             float vectorY = kulka.YNext - kulka.fY;
             float velocityX = vectorX / 100;
-            float velocityY = vectorY / 100;
+            float velocityY = vectorY / 100;*/
             float promien = kulka.Srednica / 2;
 
-            float updatedX = kulka.X + velocityX;
-            float updatedY = kulka.Y + velocityY;
+            float updatedX = kulka.X + kulka.VelocityX;
+            float updatedY = kulka.Y + kulka.VelocityY;
 
             bool bounced = false;
 
             if (updatedX - promien <= topLeftX || updatedX + promien >= topLeftX + width)
             {
-                kulka.XNext = kulka.fX - vectorX;
-                vectorX = kulka.XNext - kulka.fX;
-                velocityX = vectorX / 100;
-                updatedX = kulka.X + velocityX;
+                kulka.VelocityX = -kulka.VelocityX;
+                updatedX = kulka.X + kulka.VelocityX;
                 bounced = true;
             }
 
             if (updatedY - promien <= topLeftY || updatedY + promien >= topLeftY + height)
             {
-                kulka.YNext = kulka.fY - vectorY;
-                vectorY = kulka.YNext - kulka.fY;
-                velocityY = vectorY / 100;
-                updatedY = kulka.Y + velocityY;
+                kulka.VelocityY = -kulka.VelocityY;
+                updatedY = kulka.Y + kulka.VelocityY;
                 bounced = true;
             }
 
@@ -145,11 +141,9 @@ namespace Logika
                         if (!collisionPairs.Contains(pair) && !collisionPairs.Contains(reversePair))
                         {
 
-                            kulka.XNext = kulka.X;
-                            kulka.YNext = kulka.Y;
-                            innaKulka.XNext = innaKulka.X;
-                            innaKulka.YNext = innaKulka.Y;
-
+                            odbicie(kulka, innaKulka);
+                            updatedX = kulka.X + kulka.VelocityX;
+                            updatedY = kulka.Y + kulka.VelocityY;
                             collisionPairs.Add(pair);
                         }
                     }
@@ -168,6 +162,43 @@ namespace Logika
             }
         }
 
+        public void odbicie(Kulka kulka1, Kulka kulka2)
+        {
+            float dx = kulka2.X - kulka1.X;
+            float dy = kulka2.Y - kulka1.Y;
+            float distance = (float)Math.Sqrt(dx * dx + dy * dy);
+
+            if (true)
+            {
+                float nx = dx / distance;
+                float ny = dy / distance;
+
+                float tx = -ny;
+                float ty = nx;
+
+                float dpTan1 = kulka1.VelocityX * tx + kulka1.VelocityY * ty;
+                float dpTan2 = kulka2.VelocityX * tx + kulka2.VelocityY * ty;
+
+                float dpNorm1 = kulka1.VelocityX * nx + kulka1.VelocityY * ny;
+                float dpNorm2 = kulka2.VelocityX * nx + kulka2.VelocityY * ny;
+
+                float m1 = (float)((dpNorm1 * (kulka1.Waga - kulka2.Waga) + 2.0 * kulka2.Waga * dpNorm2) / (kulka1.Waga + kulka2.Waga));
+                float m2 = (float)((dpNorm2 * (kulka2.Waga - kulka1.Waga) + 2.0 * kulka1.Waga * dpNorm1) / (kulka1.Waga + kulka2.Waga));
+
+                kulka1.VelocityX = tx * dpTan1 + nx * m1;
+                kulka1.VelocityY = ty * dpTan1 + ny * m1;
+                kulka2.VelocityX = tx * dpTan2 + nx * m2;
+                kulka2.VelocityY = ty * dpTan2 + ny * m2;
+
+
+                float overlap = (float)(0.5 * (distance - kulka1.Srednica / 2 - kulka2.Srednica / 2));
+                kulka1.X -= overlap * nx;
+                kulka1.Y -= overlap * ny;
+                kulka2.X += overlap * nx;
+                kulka2.Y += overlap * ny;
+            }
+        }
+    
 
         /*if (kulka.X != kulka.XNext || kulka.Y != kulka.YNext)
         {

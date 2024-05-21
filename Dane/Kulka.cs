@@ -33,8 +33,8 @@ namespace Dane
             this.waga = waga;
             this.srednica = srednica;
 
-            this.velocityX = 0;
-            this.velocityY = 0;
+            this.velocityX = (xNext - firstX)/100;
+            this.velocityY = (yNext - firstY)/100;
         }
 
         public float Waga => waga;
