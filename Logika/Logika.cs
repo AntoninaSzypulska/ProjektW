@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Timers;
@@ -17,12 +18,14 @@ namespace Logika
         public KulkiRepository kulkiRepository;
         public Random random = new Random();
         private readonly Timer MoveTimer;
+        private readonly List<(Kulka, Kulka)> collisionPairs;
 
         public Logika()
         {
             this.plansza = new Plansza();
             kulkiRepository = new KulkiRepository();
             MoveTimer = new Timer();
+            collisionPairs = new List<(Kulka, Kulka)>();
         }
 
         public Kulka createKulka()
@@ -35,17 +38,42 @@ namespace Logika
             int minSrednica = 25;
             int maxSrednica = 70;
 
-            int waga = (int)(minWaga + (random.NextDouble() * (maxWaga - minWaga)));
+            int waga = (int)((minWaga + (random.NextDouble() * (maxWaga - minWaga))) / 2);
             int srednica = (int)(minSrednica + (random.NextDouble() * (maxSrednica - minSrednica)));
 
             float marginX = width * 0.1f;
             float marginY = height * 0.1f;
-            float randomX = marginX + (float)random.NextDouble() * (width - 2 * marginX);
-            float randomY = marginY + (float)random.NextDouble() * (height - 2 * marginY);
-            float randomXNext = marginX + (float)random.NextDouble() * (width - 2 * marginX);
-            float randomYNext = marginY + (float)random.NextDouble() * (height - 2 * marginY);
+            float randomX, randomY, randomXNext, randomYNext;
+            bool collision;
+
+            do
+            {
+                randomX = marginX + (float)random.NextDouble() * (width - 2 * marginX);
+                randomY = marginY + (float)random.NextDouble() * (height - 2 * marginY);
+                randomXNext = marginX + (float)random.NextDouble() * (width - 2 * marginX);
+                randomYNext = marginY + (float)random.NextDouble() * (height - 2 * marginY);
+
+                Kulka newKulka = new Kulka(randomX, randomY, randomXNext, randomYNext, waga, srednica);
+                collision = IsCollidingWithExistingKulkas(newKulka);
+            } while (collision);
 
             return new Kulka(randomX, randomY, randomXNext, randomYNext, waga, srednica);
+        }
+
+        private bool IsCollidingWithExistingKulkas(Kulka newKulka)
+        {
+            foreach (var existingKulka in kulkiRepository.GetKulki())
+            {
+                float dx = newKulka.X - existingKulka.X;
+                float dy = newKulka.Y - existingKulka.Y;
+                float distance = (float)Math.Sqrt(dx * dx + dy * dy);
+
+                if (distance < newKulka.Srednica / 2 + existingKulka.Srednica / 2)
+                {
+                    return true;
+                }
+            }
+            return false;
         }
 
         public void create(int amount)
@@ -83,41 +111,76 @@ namespace Logika
 
             bool bounced = false;
 
-            if (updatedX - promien < topLeftX || updatedX + promien > topLeftX + width)
+            if (updatedX - promien <= topLeftX || updatedX + promien >= topLeftX + width)
             {
-                velocityX = -velocityX;
-                updatedX = kulka.X + velocityX;
                 kulka.XNext = kulka.fX - vectorX;
-                bounced = true;
-            }
-
-            if (updatedY - promien < topLeftY || updatedY + promien > topLeftY + height)
-            {
-                velocityY = -velocityY;
-                updatedY = kulka.Y + velocityY;
-                kulka.YNext = kulka.fY - vectorY;
-                bounced = true;
-            }
-
-            if (bounced)
-            {
                 vectorX = kulka.XNext - kulka.fX;
-                vectorY = kulka.YNext - kulka.fY;
                 velocityX = vectorX / 100;
+                updatedX = kulka.X + velocityX;
+                bounced = true;
+            }
+
+            if (updatedY - promien <= topLeftY || updatedY + promien >= topLeftY + height)
+            {
+                kulka.YNext = kulka.fY - vectorY;
+                vectorY = kulka.YNext - kulka.fY;
                 velocityY = vectorY / 100;
+                updatedY = kulka.Y + velocityY;
+                bounced = true;
+            }
+
+            foreach (Kulka innaKulka in kulkiRepository.GetKulki())
+            {
+                if (innaKulka != kulka)
+                {
+                    float dx = updatedX - innaKulka.X;
+                    float dy = updatedY - innaKulka.Y;
+                    float distance = (float)Math.Sqrt(dx * dx + dy * dy);
+
+                    var pair = (kulka, innaKulka);
+                    var reversePair = (innaKulka, kulka);
+
+                    if (distance < promien + innaKulka.Srednica / 2)
+                    {
+                        if (!collisionPairs.Contains(pair) && !collisionPairs.Contains(reversePair))
+                        {
+
+                            kulka.XNext = kulka.X;
+                            kulka.YNext = kulka.Y;
+                            innaKulka.XNext = innaKulka.X;
+                            innaKulka.YNext = innaKulka.Y;
+
+                            collisionPairs.Add(pair);
+                        }
+                    }
+                    else
+                    {
+                        collisionPairs.Remove(pair);
+                        collisionPairs.Remove(reversePair);
+                    }
+                }
             }
 
             if (kulka.X != kulka.XNext || kulka.Y != kulka.YNext)
             {
-                updatedX = kulka.X + velocityX;
-                updatedY = kulka.Y + velocityY;
-
                 kulka.move(updatedX, updatedY);
-
                 KulkaMoved?.Invoke(this, new KulkaMovedEventArgs(kulka));
             }
-
         }
+
+
+        /*if (kulka.X != kulka.XNext || kulka.Y != kulka.YNext)
+        {
+            updatedX = kulka.X + velocityX;
+            updatedY = kulka.Y + velocityY;
+
+            kulka.move(updatedX, updatedY);
+
+            KulkaMoved?.Invoke(this, new KulkaMovedEventArgs(kulka));
+        }*/
+
+
+
 
         public (float, float) NextPosition()
         {

@@ -16,6 +16,8 @@ namespace Dane
         private float speed;
         private int waga;
         private int srednica;
+        private float velocityX;
+        private float velocityY;
 
         private Random random;
         private Plansza plansza;
@@ -30,10 +32,40 @@ namespace Dane
             this.yNext = xy;
             this.waga = waga;
             this.srednica = srednica;
+
+            this.velocityX = 0;
+            this.velocityY = 0;
         }
 
         public float Waga => waga;
         public float Srednica => srednica;
+
+        public float DistanceTo(Kulka otherKulka)
+        {
+            float deltaX = otherKulka.X - X;
+            float deltaY = otherKulka.Y - Y;
+            return (float)Math.Sqrt(deltaX * deltaX + deltaY * deltaY);
+        }
+
+        public float VelocityX
+        {
+            get { return velocityX; }
+            set
+            {
+                velocityX = value;
+                OnPropertyChanged("VelocityX");
+            }
+        }
+
+        public float VelocityY
+        {
+            get { return velocityY; }
+            set
+            {
+                velocityY = value;
+                OnPropertyChanged("VelocityY");
+            }
+        }
 
         public float X
         {
