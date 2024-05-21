@@ -238,16 +238,20 @@ namespace Logika
 
         public void start()
         {
-            MoveTimer.Interval = 10;
-
-            MoveTimer.Elapsed += MoveTimer_Elapsed;
-            MoveTimer.Start();
+            Task.Run(async () =>
+            {
+                while (true)
+                {
+                    await Task.Delay(10);
+                    MoveKulki();
+                }
+            });
         }
 
-        private void MoveTimer_Elapsed(object sender, ElapsedEventArgs e)
+        /*private void MoveTimer_Elapsed(object sender, ElapsedEventArgs e)
         {
             MoveKulki();
-        }
+        }*/
 
         public class KulkaMovedEventArgs : EventArgs
         {
