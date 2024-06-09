@@ -5,6 +5,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="System.Text.Json" Version="8.0.3" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\Dane\Dane.csproj" />
     <ProjectReference Include="..\Logika\Logika.csproj" />
   </ItemGroup>

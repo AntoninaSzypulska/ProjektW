@@ -70,6 +70,7 @@ namespace ViewModel
             logika.remove();
 
             Kulki.Clear();
+            logika.stopLogTimer();
 
         }
 
@@ -77,6 +78,7 @@ namespace ViewModel
         {
 
             logika.start();
+            logika.startLogTimer();
         }
 
         private void OnPropertyChanged([CallerMemberName] string propertyName = null)
