@@ -54,6 +54,8 @@ namespace ViewModel
 
         private void CreateKulki(object parameter)
         {
+            logika.startLogTimer();
+
             if (AmountChoice > 0)
             {
                 logika.create(AmountChoice);
@@ -78,7 +80,7 @@ namespace ViewModel
         {
 
             logika.start();
-            logika.startLogTimer();
+            
         }
 
         private void OnPropertyChanged([CallerMemberName] string propertyName = null)

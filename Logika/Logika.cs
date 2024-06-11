@@ -55,8 +55,6 @@ namespace Logika
 
             int width = plansza.GetWidth;
             int height = plansza.GetHeight;
-/*          int width = 740;
-            int height = 340;*/
 
             int minWaga = 50;
             int maxWaga = 160;
@@ -127,18 +125,10 @@ namespace Logika
                 
                 int width = plansza.GetWidth;
                 int height = plansza.GetHeight;
-/*               int width = 740;
-                int height = 340;*/
 
-                //float topLeftX = plansza.GettopLeftX;
-                int topLeftX = 0;
-                //float topLeftY = plansza.GettopLeftY;
-                int topLeftY = 0;
+                int topLeftX = plansza.GettopLeftX;
+                int topLeftY = plansza.GettopLeftY;
 
-                /*float vectorX = kulka.XNext - kulka.fX;
-                float vectorY = kulka.YNext - kulka.fY;
-                float velocityX = vectorX / 100;
-                float velocityY = vectorY / 100;*/
                 float promien = kulka.Srednica / 2;
 
                 float updatedX = kulka.X + kulka.VelocityX;
